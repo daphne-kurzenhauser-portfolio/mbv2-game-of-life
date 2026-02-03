@@ -3,7 +3,7 @@
 ## Description
 
 This is a basic Rust implementation for John Conway's "Game of Life" running on the
-micro::bit v2 microcontroller's 5x5 LED matrix. The program rules are as follows:
+micro:bit v2 microcontroller's 5x5 LED matrix. The program rules are as follows:
 
 - The game starts with a random world state and runs at 10 frames per second.
 - As long as the A button is held, the board will generate a random world state every frame.
@@ -21,7 +21,18 @@ micro::bit v2 microcontroller's 5x5 LED matrix. The program rules are as follows
 
 ## Implementation details
 
-TBD
+Board randomization utilizes the micro:bit v2's hardware random number generator,
+which is imported through the `microbit::hal::Rng` module.
+
+Reset buffers--such as the 5-frame lockout of the B button and the 5-frame reset
+of the world state following completion--are handled by tracking integer values.
+These values start at the frame reset count value (i.e. 5), and are checked
+at the beginning of every frame. If their value is less than 5, it is incremented;
+otherwise nothing happens. When the game reaches a completion state or the B button
+is pressed, the corresponding buffer count is reset to 0. This implementation
+could probably be done more elegantly with a timer, but this solution works fine
+enough!
+
 
 ## Attribution
 
